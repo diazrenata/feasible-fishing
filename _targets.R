@@ -5,7 +5,9 @@
 
 # Load packages required to define the pipeline:
 library(targets)
-# library(tarchetypes) # Load other packages as needed. # nolint
+library(tarchetypes) # Load other packages as needed. # nolint
+library(tidyr)
+library(dplyr)
 
 # Set target options:
 tar_option_set(
@@ -24,15 +26,29 @@ options(clustermq.scheduler = "multicore")
 tar_source()
 # source("other_functions.R") # Source other scripts as needed. # nolint
 
+
+pars <- read.csv(here::here("easy_pars.csv"))
+
+pars <- filter(pars, S < 200, S > 2)
+
+js <- pars$J
+vs <- pars$v
+
+p_table <- readRDS(here::here("ptables", "masterp_tall.Rds"))
+
+vals <- data.frame(js = js, vs = vs)
+
+#vals <- vals[1:5, ]
+
 # Replace the target list below with your own:
-list(
-  tar_target(
-    name = data,
-    command = tibble(x = rnorm(100), y = rnorm(100))
-#   format = "feather" # efficient storage of large data frames # nolint
-  ),
-  tar_target(
-    name = model,
-    command = coefficients(lm(y ~ x, data = data))
-  )
+
+t1 <- tar_map(vals,
+                targets::tar_target(analysis, full_workflow(J = js, v = vs, p_table = p_table)))
+
+t2 <- tarchetypes::tar_combine(
+  all,
+  t1,
+  command = bind_rows(!!!.x)
 )
+
+list(t1, t2)

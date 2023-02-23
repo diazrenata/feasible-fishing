@@ -12,7 +12,7 @@ get_parameters <- function(J, v) {
   
   alpha =   2 * v * J
   
-  S = alpha * log(1 + (J / alpha))
+  S = ceiling(alpha * log(1 + (J / alpha)))
   
   return(
     tibble::tibble(
