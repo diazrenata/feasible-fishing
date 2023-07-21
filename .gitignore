@@ -39,3 +39,7 @@ vignettes/*.pdf
 .Renviron
 
 *ptables/*
+
+.DS_Store
+
+*.DS_Store
