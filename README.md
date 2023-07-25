@@ -1,6 +1,12 @@
 feasible-fishing
 ================
 
+
+
+[![DOI](https://zenodo.org/badge/600098317.svg)](https://zenodo.org/badge/latestdoi/600098317)
+
+
+
 ## Context
 
 This is a summary of research conducted by Renata Diaz as part of NSF
